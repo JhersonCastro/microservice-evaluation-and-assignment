@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/Process")
 public class ProcessController {
 
+    @Autowired
     private ProcessFacade process;
 
     @GetMapping("/{pDegreeWorkId}")

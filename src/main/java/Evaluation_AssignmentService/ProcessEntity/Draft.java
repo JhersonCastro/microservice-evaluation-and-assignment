@@ -8,7 +8,6 @@ import jakarta.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table
 public class Draft extends BaseProcess {
     private int id_degree_work;
     private Date deadline;
