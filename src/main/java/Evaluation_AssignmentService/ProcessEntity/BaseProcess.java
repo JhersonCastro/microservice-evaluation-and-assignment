@@ -3,14 +3,19 @@ package Evaluation_AssignmentService.ProcessEntity;
 import Evaluation_AssignmentService.Enum.EnumProcessStatus;
 import Evaluation_AssignmentService.Enum.EnumTypeExceptions;
 import Evaluation_AssignmentService.SecurityComponent.ProcessException;
+import jakarta.persistence.*;
 
 import java.util.Date;
-
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class BaseProcess {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected final Long degreeworkId;
     protected final Date date;
     protected String url;
     protected EnumProcessStatus status = EnumProcessStatus.PENDING;
+    protected String comments;
 
     public BaseProcess(Long pDegreeWorkId) {
         degreeworkId = pDegreeWorkId;
