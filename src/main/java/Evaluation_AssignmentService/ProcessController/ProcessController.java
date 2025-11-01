@@ -3,9 +3,7 @@ package Evaluation_AssignmentService.ProcessController;
 import Evaluation_AssignmentService.ProcessEntity.Draft;
 import Evaluation_AssignmentService.ProcessService.ProcessFacade;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/Process")
@@ -16,5 +14,11 @@ public class ProcessController {
 
     @GetMapping("/{pDegreeWorkId}")
     public Draft getDraftById(Long pDegreeWorkId){ return process.getDraftById(pDegreeWorkId);}
+
+    //@PostMapping
+
+    //@PutMapping("/{}")
+
+    //@DeleteMapping("/{}")
 
 }

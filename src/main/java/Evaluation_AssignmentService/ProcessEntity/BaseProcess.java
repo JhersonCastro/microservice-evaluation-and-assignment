@@ -15,7 +15,7 @@ public abstract class BaseProcess {
     protected final Date date;
     protected String url;
     protected EnumProcessStatus status = EnumProcessStatus.PENDING;
-    protected String comments;
+    protected String comments;//toca ver bien como va a ser.
 
     public BaseProcess(Long pDegreeWorkId) {
         degreeworkId = pDegreeWorkId;
