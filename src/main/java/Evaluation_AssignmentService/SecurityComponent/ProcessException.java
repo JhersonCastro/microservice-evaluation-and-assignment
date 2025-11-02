@@ -1,7 +1,13 @@
 package Evaluation_AssignmentService.SecurityComponent;
 
 public class ProcessException extends RuntimeException {
-    public ProcessException(String message) {
-        super(message);
+    private final EnumTypeExceptions type;
+
+    public ProcessException(EnumTypeExceptions type) {
+        super(type.getMessage());
+        this.type = type;
+    }
+    public EnumTypeExceptions getType() {
+        return type;
     }
 }

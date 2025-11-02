@@ -1,22 +1,24 @@
 package Evaluation_AssignmentService.ProcessEntity;
 
-import Evaluation_AssignmentService.Enum.EnumTypeProcess;
 import Evaluation_AssignmentService.SecurityComponent.ProcessException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-import java.util.Date;
 
 @Entity
+@Table(name = "draft")
 public class Draft extends BaseProcess {
-    private int id_degree_work;
-    private Date deadline;
 
+    protected Draft() { super(); }
     public Draft(long pDegreeWorkId) { super(pDegreeWorkId); }
 
     @Override
-    protected void validateRequirements() throws ProcessException {  }
+    public void validateRequirements() throws ProcessException {
+        System.out.println("validando draft");
+    }
 
     @Override
-    protected void updateData() { }
+    protected void updateData() {
+        System.out.println("Actualizando draft");
+    }
 }
