@@ -59,7 +59,6 @@ public class ProcessController {
         List<Draft> drafts = processFacade.getDraftsByStatus(EnumProcessStatus.PENDING);
         return ResponseEntity.ok(drafts);
     }
-
     //FormatA
     @GetMapping("/formatA/{id}")
     public ResponseEntity<FormatA> getFormatAById(@PathVariable Long id) {
