@@ -8,54 +8,91 @@ import Evaluation_AssignmentService.ProcessEntity.BaseProcess;
 import Evaluation_AssignmentService.ProcessRepository.ProcessRepository;
 import Evaluation_AssignmentService.SecurityComponent.ProcessException;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 public abstract class ProcessService<T extends BaseProcess, D extends ProcessDTO> {
     protected final ProcessRepository<T> repository;
     protected final ProcessFactory processFactory;
 
+    @Autowired
     public ProcessService(ProcessRepository<T> repository, ProcessFactory processFactory) {
         this.repository = repository;
         this.processFactory = processFactory;
     }
-    public T findByDegreeWorkId(Long pId) {
-        return repository.findById(pId).orElse(null);
-    }
 
-    public T save(T pNewProcess) {
-        if (repository.existsById(pNewProcess.getDegreeworkId()))
-            throw new ProcessException(EnumTypeExceptions.EXISTING_ID);
-        else return repository.save(pNewProcess);
+    protected T findById(Long pId){ return repository.findById(pId).orElse(null); }
+    public List<T> findByStatus(EnumProcessStatus pStatus) {
+        return repository.findByStatus(pStatus);
     }
-
     public List<T> findAll() {
         return repository.findAll();
     }
 
+    //TEMPLATE
+    public T save(T pNewProcess) {
+        if(extractByDegreeWorkId(pNewProcess.getDegreeworkId()) != null) throw new ProcessException(EnumTypeExceptions.EXISTING_ID);
+        else validateBeforeCreate(pNewProcess);
+        return repository.save(pNewProcess);
+    }
     public T update(Long pId, T pUpdatedProcess) {
-        Optional<T> vProcess = repository.findById(pId);
-        if(vProcess == null) throw new ProcessException(EnumTypeExceptions.NOT_FOUND);
-        pUpdatedProcess.validateRequirements();
+        T vProcess = this.findByDegreeWorkId(pId);
         pUpdatedProcess.setDegreeworkId(pId);
         return repository.save(pUpdatedProcess);
     }
-    public abstract T reUploadProcess(Long pId, T pReUploadProcess);
-
-    public T evaluateProcess(Long pId, String pComment, EnumProcessStatus pNewStatus) {
-        //no deberia retornar el resultado de la evaluacion? (fallo al evaluar, evaluo correctamente, se nego etc..)
-        T vCurrentProcess = this.findByDegreeWorkId(pId);
-        if (vCurrentProcess == null)
-            throw new ProcessException(EnumTypeExceptions.NOT_FOUND);
-        vCurrentProcess.evaluate(pNewStatus,pComment);
+    //TEMPLATE
+    //FINAL
+    public T reUploadProcess(T pReUploadProcess){
+        T vCurrentProcess = this.findByDegreeWorkId(pReUploadProcess.getDegreeworkId());
+        validateCurrentStatus(vCurrentProcess);
+        if(!vCurrentProcess.getStatus().equals(EnumProcessStatus.REJECTED))
+            throw new ProcessException(EnumTypeExceptions.NON_MODIFICABLE_PROCESS);
+        validateCurrentStatus(vCurrentProcess);
+        SynchronizeData(vCurrentProcess, pReUploadProcess);
+        vCurrentProcess.setStatus(EnumProcessStatus.PENDING);
         return repository.save(vCurrentProcess);
     }
 
-
-    public List<T> findByStatus(EnumProcessStatus pStatus) {
-        return repository.findByStatus(pStatus);
+    //TEMPLATE
+    //FINAL
+    public T evaluateProcess(Long pId, String pComment, EnumProcessStatus pNewStatus) {
+        T vCurrentProcess = this.findByDegreeWorkId(pId);
+        validateCurrentStatus(vCurrentProcess);
+        if(!vCurrentProcess.getStatus().equals(EnumProcessStatus.PENDING))
+            throw new ProcessException(EnumTypeExceptions.PROCESS_NOT_PENDING);
+        validateNewStatus(pNewStatus);
+        vCurrentProcess.setComments(pComment);
+        vCurrentProcess.setStatus(pNewStatus);
+        updateInternalData(vCurrentProcess);
+        return repository.save(vCurrentProcess);
     }
+    private void validateCurrentStatus(T pCurrentProcess){
+        if(pCurrentProcess.getStatus().equals(EnumProcessStatus.APPROVED))
+            throw new ProcessException(EnumTypeExceptions.PROCESS_APPROVED);
+        validateRequirements(pCurrentProcess);
+    }
+    private void validateNewStatus(EnumProcessStatus pNewStatus){
+        if(pNewStatus == null || pNewStatus.equals(EnumProcessStatus.PENDING))
+            throw new ProcessException(EnumTypeExceptions.INVALID_NEW_STATUS);
+    }
+    //OVERRIDE
+    protected void SynchronizeData(T pCurrentProcess, T pUpdateProcess){
+        pCurrentProcess.setUrl(pUpdateProcess.getUrl());
+    }
+
+    public T findByDegreeWorkId(Long pDegreeworkId) {
+        return repository.findByDegreeworkId(pDegreeworkId)
+                .orElseThrow(() -> new ProcessException(EnumTypeExceptions.NOT_FOUND));
+    }
+    public T extractByDegreeWorkId(Long pDegreeWorkId){
+        return repository.findByDegreeworkId(pDegreeWorkId).orElse(null);
+    }
+
+    protected abstract void updateInternalData(T pUpdateProcess);
+    protected abstract void validateBeforeCreate(T pNewProcess);
+    protected abstract void validateRequirements(T pCurrentProcess);
 }
+
 

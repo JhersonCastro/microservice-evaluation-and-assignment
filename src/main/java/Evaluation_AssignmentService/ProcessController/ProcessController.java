@@ -45,9 +45,9 @@ public class ProcessController {
     public ResponseEntity<Draft> saveDraft(@RequestBody DraftDTO pDraft) {
         return ResponseEntity.ok(processFacade.saveDraft(pDraft));
     }
-    @PutMapping("/draft/update/{id}")
-    public ResponseEntity<Draft> reUploadDraft(@PathVariable Long id, @RequestBody DraftDTO pUpdatedDraft) {
-        return ResponseEntity.ok(processFacade.reUploadDraft(id, pUpdatedDraft));
+    @PutMapping("/draft/update")
+    public ResponseEntity<Draft> reUploadDraft(@RequestBody DraftDTO pUpdatedDraft) {
+        return ResponseEntity.ok(processFacade.reUploadDraft(pUpdatedDraft));
     }
     @PutMapping("/draft/evaluate/{id}")//retornamos objeto completo o solo mensaje?
     public ResponseEntity<Draft> evaluateDraft(@PathVariable Long id, @RequestBody EvaluateProcessDTO request) {
@@ -76,17 +76,16 @@ public class ProcessController {
     public ResponseEntity<FormatA> saveFormatA(@RequestBody FormatADTO pFormatA) {
         return ResponseEntity.ok(processFacade.saveFormatA(pFormatA));
     }
-    @PutMapping("/formatA/update/{id}")
-    public ResponseEntity<FormatA> reUploadFormatA(@PathVariable Long id, @RequestBody FormatADTO pUpdatedFormatA) {
-        return ResponseEntity.ok(processFacade.reUploadFormatA(id, pUpdatedFormatA));
+    @PutMapping("/formatA/update")
+    public ResponseEntity<FormatA> reUploadFormatA(@RequestBody FormatADTO pUpdatedFormatA) {
+        return ResponseEntity.ok(processFacade.reUploadFormatA(pUpdatedFormatA));
     }
     @PutMapping("/formatA/evaluate/{id}")
     public ResponseEntity<FormatA> evaluateFormatA(@PathVariable Long id, @RequestBody EvaluateProcessDTO request) {
-        FormatA vEvaluatedDraft = processFacade.evaluateFormatA(id, request);
-        System.out.println("Evaluado");
-        if(vEvaluatedDraft.getAttempts() > 3)
-            vEvaluatedDraft.getAttempts();//LLAMADO A RABBITMQ
-        return ResponseEntity.ok(vEvaluatedDraft);
+        FormatA vEvaluateFormatA = processFacade.evaluateFormatA(id, request);
+        if(vEvaluateFormatA.getAttempts() > 3)
+            vEvaluateFormatA.getAttempts();//LLAMADO A RABBITMQ
+        return ResponseEntity.ok(vEvaluateFormatA);
     }
     @GetMapping("/formatA/pending")
     public ResponseEntity<List<FormatA>> getPendingFormatsA() {

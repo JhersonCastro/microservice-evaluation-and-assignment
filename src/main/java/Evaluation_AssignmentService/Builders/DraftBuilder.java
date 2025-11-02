@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 public class DraftBuilder implements IProcessBuilder<Draft,DraftDTO> {
     @Override
     public Draft buildFromDTO(DraftDTO pDTO) {
-        return new Draft(pDTO.getDegreeWorkId());
+        return new Draft(pDTO.getDegreeWorkId(), pDTO.getUrl());
     }
 }

@@ -3,31 +3,17 @@ package Evaluation_AssignmentService.Dto;
 import Evaluation_AssignmentService.Enum.EnumProcessStatus;
 
 public class EvaluateProcessDTO {
-    private Long pId;
-    private String pComment;
-    private EnumProcessStatus pNewStatus;
+    private String Comment;
+    private EnumProcessStatus NewStatus;
 
-    public Long getpId() {
-        return pId;
+    public String getComment() { return Comment;}
+    public void setComment(String comment) {
+        this.Comment = comment;
     }
-
-    public void setpId(Long pId) {
-        this.pId = pId;
+    public EnumProcessStatus getNewStatus() {
+        return NewStatus;
     }
-
-    public String getpComment() {
-        return pComment;
-    }
-
-    public void setpComment(String pComment) {
-        this.pComment = pComment;
-    }
-
-    public EnumProcessStatus getpNewStatus() {
-        return pNewStatus;
-    }
-
-    public void setpNewStatus(EnumProcessStatus pNewStatus) {
-        this.pNewStatus = pNewStatus;
+    public void setNewStatus(EnumProcessStatus newStatus) {
+        this.NewStatus = newStatus;
     }
 }
