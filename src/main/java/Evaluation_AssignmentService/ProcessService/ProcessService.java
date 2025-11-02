@@ -45,12 +45,14 @@ public abstract class ProcessService<T extends BaseProcess, D extends ProcessDTO
     public abstract T reUploadProcess(Long pId, T pReUploadProcess);
 
     public T evaluateProcess(Long pId, String pComment, EnumProcessStatus pNewStatus) {
+        //no deberia retornar el resultado de la evaluacion? (fallo al evaluar, evaluo correctamente, se nego etc..)
         T vCurrentProcess = this.findByDegreeWorkId(pId);
         if (vCurrentProcess == null)
             throw new ProcessException(EnumTypeExceptions.NOT_FOUND);
         vCurrentProcess.evaluate(pNewStatus,pComment);
         return repository.save(vCurrentProcess);
     }
+
 
     public List<T> findByStatus(EnumProcessStatus pStatus) {
         return repository.findByStatus(pStatus);

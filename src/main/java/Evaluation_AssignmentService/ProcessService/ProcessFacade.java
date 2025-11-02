@@ -35,8 +35,10 @@ public class ProcessFacade {
     // Draft methods
     public Draft getDraftById(Long pId){ return draftService.findByDegreeWorkId(pId);}
     public Draft saveDraft(DraftDTO pDto){
-        if(getFormatAById(pDto.getDegreeWorkId()) != null) throw new ProcessException(EnumTypeExceptions.PREREQUISITE_NOT_MET);
-        else return draftService.save((Draft)factory.createProcessFromDTO(pDto));
+        if(getFormatAById(pDto.getDegreeWorkId()) != null)
+            throw new ProcessException(EnumTypeExceptions.PREREQUISITE_NOT_MET);
+        else
+            return draftService.save((Draft)factory.createProcessFromDTO(pDto));
     }
     public List<Draft> getAllDrafts(){ return draftService.findAll(); }
     public Draft reUploadDraft(Long pId, DraftDTO pDto){ return draftService.reUploadProcess(pId, (Draft)factory.createProcessFromDTO(pDto)); }

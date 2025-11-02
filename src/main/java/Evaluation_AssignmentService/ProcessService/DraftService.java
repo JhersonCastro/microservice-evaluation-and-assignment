@@ -4,6 +4,8 @@ import Evaluation_AssignmentService.Dto.DraftDTO;
 import Evaluation_AssignmentService.ProcessEntity.Draft;
 import Evaluation_AssignmentService.ProcessEntity.ProcessFactory;
 import Evaluation_AssignmentService.ProcessRepository.DraftRepository;
+import Evaluation_AssignmentService.SecurityComponent.EnumTypeExceptions;
+import Evaluation_AssignmentService.SecurityComponent.ProcessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +20,10 @@ public class DraftService extends ProcessService<Draft, DraftDTO>{
 
     @Override
     public Draft reUploadProcess(Long pId, Draft pReUploadProcess) {
-        return null;
+        Draft existingDraft = draftRepository.findById(pId).orElseThrow(() -> new ProcessException(EnumTypeExceptions.NOT_FOUND));
+        existingDraft.setComments(pReUploadProcess.getComments());
+        existingDraft.setDate(pReUploadProcess.getDate());
+        existingDraft.setUrl(pReUploadProcess.getUrl());
+        return draftRepository.save(existingDraft);
     }
 }

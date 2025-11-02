@@ -1,6 +1,7 @@
 package Evaluation_AssignmentService.ProcessService;
 
 import Evaluation_AssignmentService.Dto.FormatADTO;
+import Evaluation_AssignmentService.ProcessEntity.Draft;
 import Evaluation_AssignmentService.ProcessEntity.FormatA;
 import Evaluation_AssignmentService.ProcessEntity.ProcessFactory;
 import Evaluation_AssignmentService.ProcessRepository.ProcessRepository;
@@ -19,12 +20,11 @@ public class FormatAService extends ProcessService<FormatA, FormatADTO>{
 
     @Override
     public FormatA reUploadProcess(Long pId, FormatA pUpdatedProcess){
-        Optional<FormatA> vFormatA = repository.findById(pId);
-        if(vFormatA == null) throw new ProcessException(EnumTypeExceptions.NOT_FOUND);
-        pUpdatedProcess.setAttempts(vFormatA.get().getAttempts());
-        pUpdatedProcess.setDate(vFormatA.get().getDate());
-        pUpdatedProcess.setDegreeworkId(pId);
-        pUpdatedProcess.validateRequirements();
-        return repository.save(pUpdatedProcess);
+        FormatA existingformatA = repository.findById(pId).orElseThrow(() -> new ProcessException(EnumTypeExceptions.NOT_FOUND));
+        existingformatA.setComments(pUpdatedProcess.getComments());
+        existingformatA.setDate(pUpdatedProcess.getDate());
+        existingformatA.setUrl(pUpdatedProcess.getUrl());
+        existingformatA.setCompanyLetterPath(pUpdatedProcess.getCompanyLetterPath());
+        return repository.save(existingformatA);
     }
 }

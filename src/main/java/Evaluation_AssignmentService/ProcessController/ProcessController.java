@@ -8,6 +8,7 @@ import Evaluation_AssignmentService.ProcessEntity.Draft;
 import Evaluation_AssignmentService.ProcessEntity.FormatA;
 import Evaluation_AssignmentService.ProcessService.ProcessFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,10 @@ public class ProcessController {
     //Dragt
     @GetMapping("/draft/{id}")
     public ResponseEntity<Draft> getDraftById(@PathVariable Long id) {
-        return ResponseEntity.ok(processFacade.getDraftById(id));
+        Draft draft = processFacade.getDraftById(id);
+        if(draft == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseEntity.ok(draft);
     }
     @GetMapping("/draft/all")
     public ResponseEntity<List<Draft>> getAllDrafts() {
@@ -41,7 +45,7 @@ public class ProcessController {
     public ResponseEntity<Draft> reUploadDraft(@PathVariable Long id, @RequestBody DraftDTO pUpdatedDraft) {
         return ResponseEntity.ok(processFacade.reUploadDraft(id, pUpdatedDraft));
     }
-    @PutMapping("/draft/evaluate/{id}")
+    @PutMapping("/draft/evaluate/{id}")//retornamos objeto completo o solo mensaje?
     public ResponseEntity<Draft> evaluateDraft(@PathVariable Long id, @RequestBody EvaluateProcessDTO request) {
         Draft vEvaluatedDraft = processFacade.evaluateDraft(id, request);
         return ResponseEntity.ok(vEvaluatedDraft);
@@ -55,7 +59,10 @@ public class ProcessController {
     //FormatA
     @GetMapping("/formatA/{id}")
     public ResponseEntity<FormatA> getFormatAById(@PathVariable Long id) {
-        return ResponseEntity.ok(processFacade.getFormatAById(id));
+        FormatA formatA = processFacade.getFormatAById(id);
+        if(formatA == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseEntity.ok(formatA);
     }
     @GetMapping("/formatA/all")
     public ResponseEntity<List<FormatA>> getAllFormatAs() {

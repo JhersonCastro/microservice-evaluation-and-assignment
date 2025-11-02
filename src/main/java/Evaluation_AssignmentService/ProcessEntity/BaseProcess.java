@@ -34,9 +34,8 @@ public abstract class BaseProcess {
 
     //TEMPLATE//
     public final void evaluate(EnumProcessStatus pNewStatus, String pComment) throws ProcessException {
-        if(status != EnumProcessStatus.PENDING)
-            throw new ProcessException(EnumTypeExceptions.INVALID_CURRENT_STATUS);
         validateNewStatus(pNewStatus);
+
         setStatus(pNewStatus);
         validateRequirements();
         setComments(pComment);
