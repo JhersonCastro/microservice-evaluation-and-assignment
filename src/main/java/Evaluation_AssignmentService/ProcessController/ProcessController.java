@@ -3,9 +3,12 @@ package Evaluation_AssignmentService.ProcessController;
 import Evaluation_AssignmentService.Dto.EvaluateProcessDTO;
 import Evaluation_AssignmentService.Dto.DraftDTO;
 import Evaluation_AssignmentService.Dto.FormatADTO;
+import Evaluation_AssignmentService.Dto.PresentationDTO;
 import Evaluation_AssignmentService.Enum.EnumProcessStatus;
 import Evaluation_AssignmentService.ProcessEntity.Draft;
 import Evaluation_AssignmentService.ProcessEntity.FormatA;
+import Evaluation_AssignmentService.ProcessEntity.Presentation;
+import Evaluation_AssignmentService.ProcessService.PresentationService;
 import Evaluation_AssignmentService.ProcessService.ProcessFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,13 +22,14 @@ import java.util.List;
 public class ProcessController {
 
     private final ProcessFacade processFacade;
+    private PresentationService presentationService;
 
     @Autowired
     public ProcessController(ProcessFacade processFacade) {
         this.processFacade = processFacade;
     }
 
-    //Dragt
+    //Draft
     @GetMapping("/draft/{id}")
     public ResponseEntity<Draft> getDraftById(@PathVariable Long id) {
         Draft draft = processFacade.getDraftById(id);
@@ -90,5 +94,18 @@ public class ProcessController {
         return ResponseEntity.ok(formatsA);
     }
 
+    //Presentation
+    @GetMapping("/presentation/{id}")
+    public ResponseEntity<Presentation> getPresentationById(@PathVariable Long id) {
+        return ResponseEntity.ok(presentationService.findById(id));
+    }
+    @PostMapping("/Presentation")
+    public ResponseEntity<Presentation> savePresentation(@RequestBody PresentationDTO pPresentation) {
+        return ResponseEntity.ok(presentationService.save(new Presentation(pPresentation.getIdDegreeWork(),pPresentation.getIdjurys())));
+    }
+    @PutMapping("/Presentation/update/{id}")
+    public ResponseEntity<Presentation> reUploadPresentation(@PathVariable Long id, @RequestBody PresentationDTO pPresentation) {
+        return ResponseEntity.ok(presentationService.update(id,new Presentation(pPresentation.getIdDegreeWork(),pPresentation.getIdjurys())));
+    }
 }
 
