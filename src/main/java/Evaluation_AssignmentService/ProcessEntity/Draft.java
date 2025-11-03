@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 )
 public class Draft extends BaseProcess {
     private long daysPassed = 0;
+    private Date deadline;//esto mejor que contar dias
 
     public Draft() { super(); }
 

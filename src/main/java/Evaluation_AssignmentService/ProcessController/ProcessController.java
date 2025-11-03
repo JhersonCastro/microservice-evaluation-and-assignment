@@ -1,5 +1,6 @@
 package Evaluation_AssignmentService.ProcessController;
 
+import Evaluation_AssignmentService.Comunication.Publisher;
 import Evaluation_AssignmentService.Dto.EvaluateProcessDTO;
 import Evaluation_AssignmentService.Dto.DraftDTO;
 import Evaluation_AssignmentService.Dto.FormatADTO;
@@ -13,6 +14,7 @@ import Evaluation_AssignmentService.ProcessService.ProcessFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public class ProcessController {
 
     private final ProcessFacade processFacade;
     private PresentationService presentationService;
+    private Publisher publisher;
 
     @Autowired
     public ProcessController(ProcessFacade processFacade) {
@@ -105,6 +108,13 @@ public class ProcessController {
     @PutMapping("/Presentation/update/{id}")
     public ResponseEntity<Presentation> reUploadPresentation(@PathVariable Long id, @RequestBody PresentationDTO pPresentation) {
         return ResponseEntity.ok(presentationService.update(id,new Presentation(pPresentation.getIdDegreeWork(),pPresentation.getIdjurys())));
+    }
+
+    //communications
+    @PostMapping("/postQueue")
+    public ResponseEntity<String> PostComunQueue(@RequestParam String message) {
+        publisher.sendMessageComunQueue(message);
+        return ResponseEntity.ok("Message sent");
     }
 }
 
