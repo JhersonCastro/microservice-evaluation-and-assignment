@@ -1,10 +1,8 @@
 package Evaluation_AssignmentService.ProcessController;
 
 import Evaluation_AssignmentService.Comunication.Publisher;
-import Evaluation_AssignmentService.Dto.EvaluateProcessDTO;
-import Evaluation_AssignmentService.Dto.DraftDTO;
-import Evaluation_AssignmentService.Dto.FormatADTO;
-import Evaluation_AssignmentService.Dto.PresentationDTO;
+import Evaluation_AssignmentService.Dto.*;
+import Evaluation_AssignmentService.Enum.EnumComunication;
 import Evaluation_AssignmentService.Enum.EnumProcessStatus;
 import Evaluation_AssignmentService.ProcessEntity.Draft;
 import Evaluation_AssignmentService.ProcessEntity.FormatA;
@@ -47,15 +45,21 @@ public class ProcessController {
     }
     @PostMapping("/draft")
     public ResponseEntity<Draft> saveDraft(@RequestBody DraftDTO pDraft) {
-        return ResponseEntity.ok(processFacade.saveDraft(pDraft));
+        Draft draft = processFacade.saveDraft(pDraft);
+        PostComunQueue(new ComunDTO(draft.getDegreeworkId(), "upload_draft"));
+        return ResponseEntity.ok(draft);
     }
     @PutMapping("/draft/update")
     public ResponseEntity<Draft> reUploadDraft(@RequestBody DraftDTO pUpdatedDraft) {
-        return ResponseEntity.ok(processFacade.reUploadDraft(pUpdatedDraft));
+        return ResponseEntity.ok(processFacade.saveDraft(pUpdatedDraft));
     }
     @PutMapping("/draft/evaluate/{id}")//retornamos objeto completo o solo mensaje?
     public ResponseEntity<Draft> evaluateDraft(@PathVariable Long id, @RequestBody EvaluateProcessDTO request) {
         Draft vEvaluatedDraft = processFacade.evaluateDraft(id, request);
+        if(vEvaluatedDraft.getStatus().equals(EnumProcessStatus.APPROVED)){
+            PostComunQueue(new ComunDTO(vEvaluatedDraft.getDegreeworkId(), "aprove_draft"));
+        }
+        PostComunQueue(new ComunDTO(vEvaluatedDraft.getDegreeworkId(), "reject_draft"));
         return ResponseEntity.ok(vEvaluatedDraft);
     }
     @GetMapping("/draft/pending")
@@ -78,6 +82,8 @@ public class ProcessController {
     }
     @PostMapping("/formatA")
     public ResponseEntity<FormatA> saveFormatA(@RequestBody FormatADTO pFormatA) {
+        FormatA formatA = processFacade.saveFormatA(pFormatA);
+        PostComunQueue(new ComunDTO(formatA.getDegreeworkId(), "upload_format_a"));
         return ResponseEntity.ok(processFacade.saveFormatA(pFormatA));
     }
     @PutMapping("/formatA/update")
@@ -86,10 +92,12 @@ public class ProcessController {
     }
     @PutMapping("/formatA/evaluate/{id}")
     public ResponseEntity<FormatA> evaluateFormatA(@PathVariable Long id, @RequestBody EvaluateProcessDTO request) {
-        FormatA vEvaluateFormatA = processFacade.evaluateFormatA(id, request);
-        if(vEvaluateFormatA.getAttempts() > 3)
-            vEvaluateFormatA.getAttempts();//LLAMADO A RABBITMQ
-        return ResponseEntity.ok(vEvaluateFormatA);
+        FormatA formatA = processFacade.evaluateFormatA(id, request);
+        if(formatA.getStatus().equals(EnumProcessStatus.APPROVED))
+            PostComunQueue(new ComunDTO(id, "accept_format_a"));
+        else
+            PostComunQueue(new ComunDTO(id, "reject_format_a"));
+        return ResponseEntity.ok(formatA);
     }
     @GetMapping("/formatA/pending")
     public ResponseEntity<List<FormatA>> getPendingFormatsA() {
@@ -113,7 +121,7 @@ public class ProcessController {
 
     //communications
     @PostMapping("/postQueue")
-    public ResponseEntity<String> PostComunQueue(@RequestParam String message) {
+    public ResponseEntity<String> PostComunQueue(@RequestParam ComunDTO message) {
         publisher.sendMessageComunQueue(message);
         return ResponseEntity.ok("Message sent");
     }
