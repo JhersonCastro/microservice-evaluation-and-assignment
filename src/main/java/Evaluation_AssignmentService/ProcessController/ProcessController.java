@@ -27,11 +27,12 @@ public class ProcessController {
     private PresentationService presentationService;
     private Publisher publisher;
 
-    @Autowired
-    public ProcessController(ProcessFacade processFacade) {
-        this.processFacade = processFacade;
-    }
 
+    @Autowired
+    public ProcessController(ProcessFacade processFacade, PresentationService presentationService) {
+        this.processFacade = processFacade;
+        this.presentationService = presentationService;
+    }
     //Draft
     @GetMapping("/draft/{id}")
     public ResponseEntity<Draft> getDraftById(@PathVariable Long id) {

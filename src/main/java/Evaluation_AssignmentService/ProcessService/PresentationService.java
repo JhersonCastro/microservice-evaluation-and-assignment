@@ -1,7 +1,5 @@
 package Evaluation_AssignmentService.ProcessService;
 
-import Evaluation_AssignmentService.ProcessEntity.Draft;
-import Evaluation_AssignmentService.ProcessEntity.FormatA;
 import Evaluation_AssignmentService.ProcessEntity.Presentation;
 import Evaluation_AssignmentService.ProcessRepository.PresentationRepository;
 import Evaluation_AssignmentService.SecurityComponent.EnumTypeExceptions;
@@ -9,7 +7,6 @@ import Evaluation_AssignmentService.SecurityComponent.ProcessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PresentationService {

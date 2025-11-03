@@ -16,6 +16,10 @@ public class FormatA extends BaseProcess {
     protected FormatA() { super(); }
     public FormatA(long pDegreeWorkId) { super(pDegreeWorkId); }
 
+    public FormatA(Long degreeworkId, String url) {
+        super(degreeworkId, url);
+    }
+
     public FormatA(Long degreeworkId, String url, String companyLetterPath) {
         super(degreeworkId, url);
         this.companyLetterPath = companyLetterPath;
