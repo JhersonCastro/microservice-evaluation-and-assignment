@@ -1,6 +1,8 @@
 package Evaluation_AssignmentService.Dto;
 
-public class ComunDTO {
+import java.io.Serializable;
+
+public class ComunDTO implements Serializable {
     private Long id;
     private String action;
 

@@ -23,6 +23,7 @@ public class ProcessController {
 
     private final ProcessFacade processFacade;
     private PresentationService presentationService;
+    @Autowired
     private Publisher publisher;
 
 
@@ -121,8 +122,8 @@ public class ProcessController {
 
     //communications
     @PostMapping("/postQueue")
-    public ResponseEntity<String> PostComunQueue(@RequestParam ComunDTO message) {
-        publisher.sendMessageComunQueue(message);
+    public ResponseEntity<String> PostComunQueue(@RequestBody ComunDTO message) {
+        publisher.sendMessageComunQueue();
         return ResponseEntity.ok("Message sent");
     }
 }
