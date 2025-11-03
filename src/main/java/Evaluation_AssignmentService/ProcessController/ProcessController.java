@@ -2,7 +2,6 @@ package Evaluation_AssignmentService.ProcessController;
 
 import Evaluation_AssignmentService.Comunication.Publisher;
 import Evaluation_AssignmentService.Dto.*;
-import Evaluation_AssignmentService.Enum.EnumComunication;
 import Evaluation_AssignmentService.Enum.EnumProcessStatus;
 import Evaluation_AssignmentService.ProcessEntity.Draft;
 import Evaluation_AssignmentService.ProcessEntity.FormatA;
@@ -12,7 +11,6 @@ import Evaluation_AssignmentService.ProcessService.ProcessFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -123,7 +121,7 @@ public class ProcessController {
     //communications
     @PostMapping("/postQueue")
     public ResponseEntity<String> PostComunQueue(@RequestBody ComunDTO message) {
-        publisher.sendMessageComunQueue();
+        publisher.sendMessageComunQueue(message);
         return ResponseEntity.ok("Message sent");
     }
 }
