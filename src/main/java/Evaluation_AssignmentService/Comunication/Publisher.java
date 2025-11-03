@@ -1,7 +1,7 @@
 package Evaluation_AssignmentService.Comunication;
 
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
-import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ public class Publisher {
         this.comunQueue = comunQueue;
     }
 
-    public void sendMessageComunQueue(String message){
-        rabbitTemplate.convertAndSend(comunQueue.name(),message);
+    public void sendMessageComunQueue(final String message){
+        rabbitTemplate.convertAndSend(comunQueue.getName(),message);
     }
 }
