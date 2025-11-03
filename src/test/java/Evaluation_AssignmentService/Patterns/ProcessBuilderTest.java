@@ -1,4 +1,4 @@
-package Evaluation_AssignmentService;
+package Evaluation_AssignmentService.Patterns;
 
 
 import Evaluation_AssignmentService.Builders.DraftBuilder;

@@ -1,4 +1,4 @@
-package Evaluation_AssignmentService;
+package Evaluation_AssignmentService.Services;
 
 import Evaluation_AssignmentService.Enum.EnumProcessStatus;
 import Evaluation_AssignmentService.ProcessEntity.FormatA;

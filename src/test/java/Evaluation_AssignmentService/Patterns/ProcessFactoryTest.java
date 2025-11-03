@@ -1,4 +1,4 @@
-package Evaluation_AssignmentService;
+package Evaluation_AssignmentService.Patterns;
 
 import Evaluation_AssignmentService.Builders.DraftBuilder;
 import Evaluation_AssignmentService.Builders.FormatABuilder;
@@ -44,7 +44,7 @@ public class ProcessFactoryTest {
         DraftDTO dto = new DraftDTO();
         dto.setDegreeWorkId(2L);
         dto.setUrl("http://url/draft");
-        
+
         BaseProcess result = factory.createProcessFromDTO(dto);
 
         assertTrue(result instanceof Draft);

@@ -1,10 +1,7 @@
-package Evaluation_AssignmentService;
+package Evaluation_AssignmentService.Services;
 
-import Evaluation_AssignmentService.Dto.DraftDTO;
-import Evaluation_AssignmentService.Dto.FormatADTO;
 import Evaluation_AssignmentService.Enum.EnumProcessStatus;
 import Evaluation_AssignmentService.ProcessEntity.Draft;
-import Evaluation_AssignmentService.ProcessEntity.FormatA;
 import Evaluation_AssignmentService.ProcessEntity.ProcessFactory;
 import Evaluation_AssignmentService.ProcessRepository.DraftRepository;
 import Evaluation_AssignmentService.ProcessService.DraftService;

@@ -22,13 +22,13 @@ import java.util.List;
 public class ProcessController {
 
     private final ProcessFacade processFacade;
-    private PresentationService presentationService;
+    private final PresentationService presentationService;
 
     @Autowired
-    public ProcessController(ProcessFacade processFacade) {
+    public ProcessController(ProcessFacade processFacade, PresentationService presentationService) {
         this.processFacade = processFacade;
+        this.presentationService = presentationService;
     }
-
     //Draft
     @GetMapping("/draft/{id}")
     public ResponseEntity<Draft> getDraftById(@PathVariable Long id) {
