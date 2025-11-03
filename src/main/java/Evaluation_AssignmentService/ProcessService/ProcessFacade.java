@@ -102,7 +102,7 @@ public class ProcessFacade {
         return presentationService.save(obj);
     }
     public Presentation Presentationupdate(Long id, Presentation obj){
-        presentationService.update(id, obj);
+        return presentationService.update(id, obj);
     }
 }
 
