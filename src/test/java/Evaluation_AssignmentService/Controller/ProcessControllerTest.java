@@ -45,7 +45,7 @@ public class ProcessControllerTest {
         draft = new Draft(1L, "url-draft");
         formatA = new FormatA(1L, "url-formatA", "company-letter");
         presentation = new Presentation(1L, List.of(10L, 20L));
-        controller = new ProcessController(processFacade, presentationService);
+        controller = new ProcessController(processFacade);
     }
 
     //Draft

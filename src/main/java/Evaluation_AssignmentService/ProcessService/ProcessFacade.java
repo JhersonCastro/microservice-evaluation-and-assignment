@@ -3,9 +3,11 @@ package Evaluation_AssignmentService.ProcessService;
 import Evaluation_AssignmentService.Dto.EvaluateProcessDTO;
 import Evaluation_AssignmentService.Dto.DraftDTO;
 import Evaluation_AssignmentService.Dto.FormatADTO;
+import Evaluation_AssignmentService.Dto.PresentationDTO;
 import Evaluation_AssignmentService.Enum.EnumProcessStatus;
 import Evaluation_AssignmentService.ProcessEntity.Draft;
 import Evaluation_AssignmentService.ProcessEntity.FormatA;
+import Evaluation_AssignmentService.ProcessEntity.Presentation;
 import Evaluation_AssignmentService.ProcessEntity.ProcessFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ public class ProcessFacade {
     private DraftService draftService;
     @Autowired
     private FormatAService formatAService;
+    @Autowired
+    private PresentationService presentationService;
 
     public ProcessFacade() { }
 
@@ -88,6 +92,17 @@ public class ProcessFacade {
     /** Retrieves all FormatA processes filtered by status. */
     public List<FormatA> getFormatsAByStatus(EnumProcessStatus pStatus) {
         return formatAService.findByStatus(pStatus);
+    }
+
+    // ------------------- Presentation methods -------------------
+    public Presentation PresentationFindById(Long id){
+        return presentationService.findById(id);
+    }
+    public Presentation Presentationsave(Presentation obj){
+        return presentationService.save(obj);
+    }
+    public Presentation Presentationupdate(Long id, Presentation obj){
+        presentationService.update(id, obj);
     }
 }
 

@@ -20,15 +20,13 @@ import java.util.List;
 public class ProcessController {
 
     private final ProcessFacade processFacade;
-    private PresentationService presentationService;
     @Autowired
     private Publisher publisher;
 
 
     @Autowired
-    public ProcessController(ProcessFacade processFacade, PresentationService presentationService) {
+    public ProcessController(ProcessFacade processFacade) {
         this.processFacade = processFacade;
-        this.presentationService = presentationService;
     }
     //Draft
     @GetMapping("/draft/{id}")
@@ -107,15 +105,15 @@ public class ProcessController {
     //Presentation
     @GetMapping("/presentation/{id}")
     public ResponseEntity<Presentation> getPresentationById(@PathVariable Long id) {
-        return ResponseEntity.ok(presentationService.findById(id));
+        return ResponseEntity.ok(processFacade.PresentationFindById(id));
     }
     @PostMapping("/Presentation")
     public ResponseEntity<Presentation> savePresentation(@RequestBody PresentationDTO pPresentation) {
-        return ResponseEntity.ok(presentationService.save(new Presentation(pPresentation.getIdDegreeWork(),pPresentation.getIdjurys())));
+        return ResponseEntity.ok(processFacade.Presentationsave(new Presentation(pPresentation.getIdDegreeWork(),pPresentation.getIdjurys())));
     }
     @PutMapping("/Presentation/update/{id}")
     public ResponseEntity<Presentation> reUploadPresentation(@PathVariable Long id, @RequestBody PresentationDTO pPresentation) {
-        return ResponseEntity.ok(presentationService.update(id,new Presentation(pPresentation.getIdDegreeWork(),pPresentation.getIdjurys())));
+        return ResponseEntity.ok(processFacade.Presentationupdate(id,new Presentation(pPresentation.getIdDegreeWork(),pPresentation.getIdjurys())));
     }
 
     //communications
