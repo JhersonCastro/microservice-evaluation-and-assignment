@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Facade class that centralizes access to different process services.
+ * Provides unified operations for {@link Draft} and {@link FormatA}.
+ */
 @Service
 public class ProcessFacade {
     @Autowired
@@ -30,24 +34,62 @@ public class ProcessFacade {
         this.formatAService = formatAService;
     }
 
-    // Draft methods
-    public Draft getDraftById(Long pId){ return draftService.extractByDegreeWorkId(pId);}
+    // ------------------- Draft methods -------------------
+
+    /** Retrieves a draft by its degree work ID. */
+    public Draft getDraftById(Long pId){ return draftService.extractByDegreeWorkId(pId); }
+
+    /** Creates and saves a new draft from a DTO. */
     public Draft saveDraft(DraftDTO pDto){
         return draftService.save((Draft)factory.createProcessFromDTO(pDto));
     }
-    public List<Draft> getAllDrafts(){ return draftService.findAll(); }
-    public Draft reUploadDraft(DraftDTO pDto){ return draftService.reUploadProcess((Draft)factory.createProcessFromDTO(pDto)); }
-    public Draft evaluateDraft(Long pId, EvaluateProcessDTO pDto){ return draftService.evaluateProcess(pId, pDto.getComment(), pDto.getNewStatus()); }
-    public List<Draft> getDraftsByStatus(EnumProcessStatus pStatus){ return draftService.findByStatus(pStatus);}
 
-    // FormatA methods
+    /** Retrieves all drafts. */
+    public List<Draft> getAllDrafts(){ return draftService.findAll(); }
+
+    /** Reuploads an existing draft. */
+    public Draft reUploadDraft(DraftDTO pDto){
+        return draftService.reUploadProcess((Draft)factory.createProcessFromDTO(pDto));
+    }
+
+    /** Evaluates a draft process. */
+    public Draft evaluateDraft(Long pId, EvaluateProcessDTO pDto){
+        return draftService.evaluateProcess(pId, pDto.getComment(), pDto.getNewStatus());
+    }
+
+    /** Retrieves drafts by their status. */
+    public List<Draft> getDraftsByStatus(EnumProcessStatus pStatus){
+        return draftService.findByStatus(pStatus);
+    }
+
+    // ------------------- FormatA methods -------------------
+
+    /** Retrieves a FormatA process by its degree work ID. */
     public FormatA getFormatAById(Long pId){ return formatAService.extractByDegreeWorkId(pId); }
-    public FormatA saveFormatA(FormatADTO pDto){  return formatAService.save((FormatA) factory.createProcessFromDTO(pDto));}
+
+    /** Creates and saves a new FormatA process from a DTO. */
+    public FormatA saveFormatA(FormatADTO pDto){
+        return formatAService.save((FormatA) factory.createProcessFromDTO(pDto));
+    }
+
+    /** Retrieves all FormatA processes. */
     public List<FormatA> getAllFormatAs(){ return formatAService.findAll(); }
+
+    /** Reuploads a FormatA process. */
     public FormatA reUploadFormatA(FormatADTO pDto){
-        return formatAService.reUploadProcess((FormatA) factory.createProcessFromDTO(pDto)); }
-    public FormatA evaluateFormatA(Long pId, EvaluateProcessDTO pDto){ return formatAService.evaluateProcess(pId,pDto.getComment(),pDto.getNewStatus()); }
-    public List<FormatA> getFormatsAByStatus(EnumProcessStatus pStatus) { return formatAService.findByStatus(pStatus); }
+        return formatAService.reUploadProcess((FormatA) factory.createProcessFromDTO(pDto));
+    }
+
+    /** Evaluates a FormatA process. */
+    public FormatA evaluateFormatA(Long pId, EvaluateProcessDTO pDto){
+        return formatAService.evaluateProcess(pId, pDto.getComment(), pDto.getNewStatus());
+    }
+
+    /** Retrieves all FormatA processes filtered by status. */
+    public List<FormatA> getFormatsAByStatus(EnumProcessStatus pStatus) {
+        return formatAService.findByStatus(pStatus);
+    }
 }
+
 
 

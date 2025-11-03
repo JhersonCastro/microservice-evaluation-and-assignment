@@ -1,4 +1,8 @@
 package Evaluation_AssignmentService.Dto;
 
-public class DraftDTO extends ProcessDTO{
+/**
+ * DTO for draft processes.
+ * Extends ProcessDTO but adds no additional fields.
+ */
+public class DraftDTO extends ProcessDTO {
 }

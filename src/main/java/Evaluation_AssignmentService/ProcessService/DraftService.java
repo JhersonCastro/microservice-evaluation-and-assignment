@@ -12,6 +12,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class that manages logic and validations for @Draft processes.
+ */
 @Service
 public class DraftService extends ProcessService<Draft, DraftDTO>{
 
@@ -20,24 +23,39 @@ public class DraftService extends ProcessService<Draft, DraftDTO>{
     private final DraftRepository draftRepository;
     private final FormatAService formatAService;
 
-    public DraftService(DraftRepository repository, ProcessFactory processFactory,  FormatAService formatAService) {
-        super(repository,processFactory);
+    public DraftService(DraftRepository repository, ProcessFactory processFactory, FormatAService formatAService) {
+        super(repository, processFactory);
         this.draftRepository = repository;
         this.formatAService = formatAService;
     }
 
+    /**
+     * Validates that the corresponding FormatA process exists and is approved
+     * before allowing the creation of a new Draft.
+     */
     @Override
     protected void validateRequirements(Draft pCurrentProcess) {
         if(pCurrentProcess.getStatus() == null || pCurrentProcess.getStatus().equals(EnumProcessStatus.REJECTED))
             throw new ProcessException(EnumTypeExceptions.INVALID_NEW_STATUS);
-        if(pCurrentProcess.getDaysPassed() == 60) throw new ProcessException(EnumTypeExceptions.EXPIRED_TIME);
+        if(pCurrentProcess.getDaysPassed() == 60)
+            throw new ProcessException(EnumTypeExceptions.EXPIRED_TIME);
     }
-
+    /**
+     * Updates internal Draft data such as days passed.
+     *
+     * @param pUpdateProcess the Draft entity to update
+     */
     @Override
     protected void updateInternalData(Draft pUpdateProcess) {
         pUpdateProcess.updateDaysPassed();
     }
 
+    /**
+     * Validates that a related FormatA process exists and is approved
+     * before allowing the creation of a new Draft.
+     *
+     * @param pNewProcess the new Draft process to validate
+     */
     @Override
     protected void validateBeforeCreate(Draft pNewProcess) {
         FormatA formatA = formatAService.extractByDegreeWorkId(pNewProcess.getDegreeworkId());
@@ -48,3 +66,4 @@ public class DraftService extends ProcessService<Draft, DraftDTO>{
         entityManager.clear();
     }
 }
+
