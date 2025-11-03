@@ -64,9 +64,10 @@ public abstract class ProcessService<T extends BaseProcess, D extends ProcessDTO
      * @return the saved process
      */
     public T save(T pNewProcess) {
-        if(extractByDegreeWorkId(pNewProcess.getDegreeworkId()) != null)
+
+        if(repository.existsById(pNewProcess.getDegreeworkId()))
             throw new ProcessException(EnumTypeExceptions.EXISTING_ID);
-        else validateBeforeCreate(pNewProcess);
+        validateBeforeCreate(pNewProcess);
         return repository.save(pNewProcess);
     }
 

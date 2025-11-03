@@ -81,7 +81,7 @@ public class ProcessController {
     public ResponseEntity<FormatA> saveFormatA(@RequestBody FormatADTO pFormatA) {
         FormatA formatA = processFacade.saveFormatA(pFormatA);
         PostComunQueue(new ComunDTO(formatA.getDegreeworkId(), "upload_format_a"));
-        return ResponseEntity.ok(processFacade.saveFormatA(pFormatA));
+        return ResponseEntity.ok(formatA);
     }
     @PutMapping("/formatA/update")
     public ResponseEntity<FormatA> reUploadFormatA(@RequestBody FormatADTO pUpdatedFormatA) {
