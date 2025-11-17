@@ -64,24 +64,10 @@ public abstract class ProcessService<T extends BaseProcess, D extends ProcessDTO
      * @return the saved process
      */
     public T save(T pNewProcess) {
-
-        if(repository.existsById(pNewProcess.getDegreeworkId()))
+        if(this.extractByDegreeWorkId(pNewProcess.getDegreeworkId()) != null)
             throw new ProcessException(EnumTypeExceptions.EXISTING_ID);
         validateBeforeCreate(pNewProcess);
         return repository.save(pNewProcess);
-    }
-
-    /**
-     * Updates an existing process by ID.
-     *
-     * @param pId the degree work ID
-     * @param pUpdatedProcess the updated process
-     * @return the saved process
-     */
-    public T update(Long pId, T pUpdatedProcess) {
-        T vProcess = this.findByDegreeWorkId(pId);
-        pUpdatedProcess.setDegreeworkId(pId);
-        return repository.save(pUpdatedProcess);
     }
 
     /**
@@ -92,9 +78,7 @@ public abstract class ProcessService<T extends BaseProcess, D extends ProcessDTO
      */
     public T reUploadProcess(T pReUploadProcess){
         T vCurrentProcess = this.findByDegreeWorkId(pReUploadProcess.getDegreeworkId());
-        validateCurrentStatus(vCurrentProcess);
-        if(!vCurrentProcess.getStatus().equals(EnumProcessStatus.REJECTED))
-            throw new ProcessException(EnumTypeExceptions.NON_MODIFICABLE_PROCESS);
+        validateCanBeResubmitted(vCurrentProcess);
         validateRequirements(vCurrentProcess);
         SynchronizeData(vCurrentProcess, pReUploadProcess);
         vCurrentProcess.setStatus(EnumProcessStatus.PENDING);
@@ -111,15 +95,23 @@ public abstract class ProcessService<T extends BaseProcess, D extends ProcessDTO
      */
     public T evaluateProcess(Long pId, String pComment, EnumProcessStatus pNewStatus) {
         T vCurrentProcess = this.findByDegreeWorkId(pId);
-        validateCurrentStatus(vCurrentProcess);
-        if(!vCurrentProcess.getStatus().equals(EnumProcessStatus.PENDING))
-            throw new ProcessException(EnumTypeExceptions.PROCESS_NOT_PENDING);
+        validateCanBeEvaluated(vCurrentProcess);
         validateNewStatus(pNewStatus);
         vCurrentProcess.setComments(pComment);
         vCurrentProcess.setStatus(pNewStatus);
         updateInternalData(vCurrentProcess);
         validateRequirements(vCurrentProcess);
         return repository.save(vCurrentProcess);
+    }
+    private void validateCanBeEvaluated(T pProcess){
+        validateCurrentStatus(pProcess);
+        if(!pProcess.getStatus().equals(EnumProcessStatus.PENDING))
+            throw new ProcessException(EnumTypeExceptions.PROCESS_NOT_PENDING);
+    }
+    private void validateCanBeResubmitted(T pProcess){
+        validateCurrentStatus(pProcess);
+        if(!pProcess.getStatus().equals(EnumProcessStatus.REJECTED))
+            throw new ProcessException(EnumTypeExceptions.NON_MODIFICABLE_PROCESS);
     }
 
     /**

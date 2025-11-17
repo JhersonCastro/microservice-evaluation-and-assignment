@@ -3,7 +3,6 @@ package Evaluation_AssignmentService.ProcessService;
 import Evaluation_AssignmentService.Dto.EvaluateProcessDTO;
 import Evaluation_AssignmentService.Dto.DraftDTO;
 import Evaluation_AssignmentService.Dto.FormatADTO;
-import Evaluation_AssignmentService.Dto.PresentationDTO;
 import Evaluation_AssignmentService.Enum.EnumProcessStatus;
 import Evaluation_AssignmentService.ProcessEntity.Draft;
 import Evaluation_AssignmentService.ProcessEntity.FormatA;
@@ -28,23 +27,27 @@ public class ProcessFacade {
     private FormatAService formatAService;
     @Autowired
     private PresentationService presentationService;
+    @Autowired
+    private DegreeWorkService degreeWorksService;
 
     public ProcessFacade() { }
 
     @Autowired
-    public ProcessFacade(ProcessFactory factory, DraftService draftService, FormatAService formatAService) {
+    public ProcessFacade(ProcessFactory factory, DraftService draftService, FormatAService formatAService, DegreeWorkService degreeWorksService) {
         this.factory = factory;
         this.draftService = draftService;
         this.formatAService = formatAService;
+        this.degreeWorksService = degreeWorksService;
     }
 
     // ------------------- Draft methods -------------------
 
     /** Retrieves a draft by its degree work ID. */
-    public Draft getDraftById(Long pId){ return draftService.extractByDegreeWorkId(pId); }
+    public Draft findDraftByDegreeWorkId(Long pId){ return draftService.findByDegreeWorkId(pId); }
 
     /** Creates and saves a new draft from a DTO. */
     public Draft saveDraft(DraftDTO pDto){
+        degreeWorksService.validateExistingId(pDto.getDegreeWorkId());
         return draftService.save((Draft)factory.createProcessFromDTO(pDto));
     }
 
@@ -69,10 +72,11 @@ public class ProcessFacade {
     // ------------------- FormatA methods -------------------
 
     /** Retrieves a FormatA process by its degree work ID. */
-    public FormatA getFormatAById(Long pId){ return formatAService.extractByDegreeWorkId(pId); }
+    public FormatA getFormatAByDegreeWorkId(Long pId){ return formatAService.extractByDegreeWorkId(pId); }
 
     /** Creates and saves a new FormatA process from a DTO. */
     public FormatA saveFormatA(FormatADTO pDto){
+        degreeWorksService.validateExistingId(pDto.getDegreeWorkId());
         return formatAService.save((FormatA) factory.createProcessFromDTO(pDto));
     }
 
@@ -101,9 +105,7 @@ public class ProcessFacade {
     public Presentation Presentationsave(Presentation obj){
         return presentationService.save(obj);
     }
-    public Presentation Presentationupdate(Long id, Presentation obj){
-        return presentationService.update(id, obj);
-    }
+    public Presentation Presentationupdate(Long id, Presentation obj){ return presentationService.update(id, obj);}
 }
 
 

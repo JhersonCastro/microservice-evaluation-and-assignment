@@ -8,8 +8,7 @@ import Evaluation_AssignmentService.ProcessEntity.ProcessFactory;
 import Evaluation_AssignmentService.ProcessRepository.DraftRepository;
 import Evaluation_AssignmentService.SecurityComponent.EnumTypeExceptions;
 import Evaluation_AssignmentService.SecurityComponent.ProcessException;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,8 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DraftService extends ProcessService<Draft, DraftDTO>{
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
     private final DraftRepository draftRepository;
     private final FormatAService formatAService;
 
@@ -35,9 +33,7 @@ public class DraftService extends ProcessService<Draft, DraftDTO>{
      */
     @Override
     protected void validateRequirements(Draft pCurrentProcess) {
-        if(pCurrentProcess.getStatus() == null || pCurrentProcess.getStatus().equals(EnumProcessStatus.REJECTED))
-            throw new ProcessException(EnumTypeExceptions.INVALID_NEW_STATUS);
-        if(pCurrentProcess.getDaysPassed() == 60)
+        if(pCurrentProcess.getDaysPassed() >= 60)
             throw new ProcessException(EnumTypeExceptions.EXPIRED_TIME);
     }
     /**
@@ -63,7 +59,6 @@ public class DraftService extends ProcessService<Draft, DraftDTO>{
             throw new ProcessException(EnumTypeExceptions.PREVIOUS_PROCESS_NOT_SUMBITTED);
         if(!formatA.getStatus().equals(EnumProcessStatus.APPROVED))
             throw new ProcessException(EnumTypeExceptions.PREVIOUS_PROCESS_NOT_APPROVED);
-        entityManager.clear();
     }
 }
 

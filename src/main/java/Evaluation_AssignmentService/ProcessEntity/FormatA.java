@@ -1,5 +1,6 @@
 package Evaluation_AssignmentService.ProcessEntity;
 
+import Evaluation_AssignmentService.Enum.EnumTypeProcess;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -80,4 +81,10 @@ public class FormatA extends BaseProcess {
      * Increases the number of attempts by one.
      */
     public void increaseAttempts(){ this.attempts++; }
+
+    @Override
+    public EnumTypeProcess getTypeProcess() {
+        return EnumTypeProcess.FORMAT_A;
+    }
+
 }

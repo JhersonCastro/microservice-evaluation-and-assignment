@@ -51,7 +51,7 @@ public class ProcessControllerTest {
     //Draft
     @Test
     void testGetDraftByIdFound() {
-        when(processFacade.getDraftById(1L)).thenReturn(draft);
+        when(processFacade.findDraftByDegreeWorkId(1L)).thenReturn(draft);
         ResponseEntity<Draft> response = controller.getDraftById(1L);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -60,7 +60,7 @@ public class ProcessControllerTest {
 
     @Test
     void testGetDraftByIdNotFound() {
-        when(processFacade.getDraftById(1L)).thenReturn(null);
+        when(processFacade.findDraftByDegreeWorkId(1L)).thenReturn(null);
         ResponseEntity<Draft> response = controller.getDraftById(1L);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -89,7 +89,7 @@ public class ProcessControllerTest {
     //FormatA
     @Test
     void testGetFormatAByIdFound() {
-        when(processFacade.getFormatAById(1L)).thenReturn(formatA);
+        when(processFacade.getFormatAByDegreeWorkId(1L)).thenReturn(formatA);
         ResponseEntity<FormatA> response = controller.getFormatAById(1L);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -98,7 +98,7 @@ public class ProcessControllerTest {
 
     @Test
     void testGetFormatAByIdNotFound() {
-        when(processFacade.getFormatAById(1L)).thenReturn(null);
+        when(processFacade.getFormatAByDegreeWorkId(1L)).thenReturn(null);
         ResponseEntity<FormatA> response = controller.getFormatAById(1L);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());

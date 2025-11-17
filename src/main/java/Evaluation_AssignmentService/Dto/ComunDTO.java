@@ -1,22 +1,24 @@
 package Evaluation_AssignmentService.Dto;
 
+import Evaluation_AssignmentService.Enum.EnumProcessStatus;
+
 import java.io.Serializable;
 
 public class ComunDTO implements Serializable {
     private Long id;
-    private String action;
+    private EnumProcessStatus status;
 
     public ComunDTO() {}
-    public ComunDTO(Long id, String action) {
+    public ComunDTO(Long id, EnumProcessStatus status) {
         this.id = id;
-        this.action = action;
+        this.status = status;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getAction() {
-        return action;
+    public EnumProcessStatus getAction() {
+        return status;
     }
 }

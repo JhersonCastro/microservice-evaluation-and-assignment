@@ -1,6 +1,7 @@
 package Evaluation_AssignmentService.ProcessEntity;
 
 import Evaluation_AssignmentService.Enum.EnumProcessStatus;
+import Evaluation_AssignmentService.Enum.EnumTypeProcess;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -33,7 +34,7 @@ public abstract class BaseProcess {
     protected EnumProcessStatus status = EnumProcessStatus.PENDING;
 
     /** Optional comments for the process. */
-    protected String comments = "";
+    protected String comments;
 
     /** Default constructor that sets the creation date. */
     protected BaseProcess() {
@@ -89,4 +90,6 @@ public abstract class BaseProcess {
 
     /** @param comments comments to set */
     public void setComments(String comments) { this.comments = comments; }
+
+    public abstract EnumTypeProcess getTypeProcess();
 }

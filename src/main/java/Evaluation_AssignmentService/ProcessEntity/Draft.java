@@ -1,5 +1,6 @@
 package Evaluation_AssignmentService.ProcessEntity;
 
+import Evaluation_AssignmentService.Enum.EnumTypeProcess;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -74,4 +75,10 @@ public class Draft extends BaseProcess {
     public void setDaysPassed(long daysPassed) {
         calculateDaysPassed();
     }
+
+    @Override
+    public EnumTypeProcess getTypeProcess() {
+        return EnumTypeProcess.DRAFT;
+    }
+
 }

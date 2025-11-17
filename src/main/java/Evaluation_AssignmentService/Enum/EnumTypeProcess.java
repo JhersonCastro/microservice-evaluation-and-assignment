@@ -2,12 +2,21 @@ package Evaluation_AssignmentService.Enum;
 
 /**
  * Enumeration of process types.
- * Identifies the kind of process handled in the system.
+ * Identifies the type of process handled in the system.
  */
 public enum EnumTypeProcess {
-    /** Draft process. */
-    DRAFT,
 
-    /** Format A process. */
-    FORMAT_A
+    DRAFT("ANTEPROYECTO "),
+    FORMAT_A("FORMATO A");
+
+    private final String message;
+
+    EnumTypeProcess(String pNameMessage) {
+        this.message = pNameMessage;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }
+

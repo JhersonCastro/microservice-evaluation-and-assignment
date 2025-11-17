@@ -57,7 +57,7 @@ public class ProcessFacadeTest {
         Draft draft = new Draft(1L, "url");
         when(draftService.extractByDegreeWorkId(1L)).thenReturn(draft);
 
-        Draft result = facade.getDraftById(1L);
+        Draft result = facade.findDraftByDegreeWorkId(1L);
 
         verify(draftService).extractByDegreeWorkId(1L);
         assertEquals(draft, result);
@@ -134,7 +134,7 @@ public class ProcessFacadeTest {
         FormatA formatA = new FormatA(1L, "url");
         when(formatAService.extractByDegreeWorkId(1L)).thenReturn(formatA);
 
-        FormatA result = facade.getFormatAById(1L);
+        FormatA result = facade.getFormatAByDegreeWorkId(1L);
 
         verify(formatAService).extractByDegreeWorkId(1L);
         assertEquals(formatA, result);
